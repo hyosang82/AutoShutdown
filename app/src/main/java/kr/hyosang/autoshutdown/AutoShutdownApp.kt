@@ -13,6 +13,8 @@ class AutoShutdownApp() : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        AppPref.init(applicationContext)
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
                 .createNotificationChannel(
