@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
 
@@ -24,10 +25,14 @@ class PowerMonService: Service() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             if(Intent.ACTION_POWER_DISCONNECTED == p1?.action) {
                 val delay = AppPref.instance.delaySec
+                val builder: Notification.Builder = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Notification.Builder(p0, Const.NotificationChannelId)
+                }else {
+                    Notification.Builder(p0)
+                }
                 (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
                     .notify(
-                        0, Notification.Builder(p0, Const.NotificationChannelId)
-                            .setSmallIcon(android.R.drawable.ic_lock_power_off)
+                        0, builder.setSmallIcon(android.R.drawable.ic_lock_power_off)
                             .setContentTitle("Device will shutdown")
                             .setContentText("Device will shutdown in $delay sec. Tap notification to stop.")
                             .setTicker("Device will shutdown")
