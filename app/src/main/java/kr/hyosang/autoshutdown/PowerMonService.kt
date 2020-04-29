@@ -83,7 +83,12 @@ class PowerMonService: Service() {
             if(stopped) {
                 (applicationContext?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(0)
             }else {
-                var i = Intent("com.android.internal.intent.action.REQUEST_SHUTDOWN")
+                val action = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    "com.android.internal.intent.action.REQUEST_SHUTDOWN"
+                }else {
+                    "android.intent.action.ACTION_REQUEST_SHUTDOWN"
+                }
+                var i = Intent(action)
                 i.putExtra("android.intent.extra.KEY_CONFIRM", false)
                 i.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
