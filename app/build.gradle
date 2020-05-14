@@ -7,10 +7,10 @@ apply plugin: 'kotlin-android-extensions'
 android {
     signingConfigs {
         debug {
-            storeFile file('D:\\aosp\\NEXUS_5X\\platform.keystore')
-            storePassword 'password'
+            storeFile file('D:\\aosp\\NEXUS_7_FLO\\platform.jks')
+            storePassword 'android'
             keyAlias = 'platform'
-            keyPassword 'password'
+            keyPassword 'android'
         }
     }
     compileSdkVersion 29

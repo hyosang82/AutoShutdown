@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
 import android.util.Log
 
 class PowerMonService: Service() {
@@ -70,6 +71,10 @@ class PowerMonService: Service() {
         override fun run() {
             DelayedShutdown.stopped = false
 
+            val wakelock = (applicationContext?.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "autoshutdown:WAKELOCK").apply { acquire() }
+            }
+
             while(delay > 0) {
                 Thread.sleep(1000)
                 delay -= 1
@@ -95,6 +100,8 @@ class PowerMonService: Service() {
 
                 applicationContext?.startActivity(i)
             }
+
+            wakelock.release()
         }
     }
 }
